@@ -12,6 +12,10 @@ public class PaymentsConfig extends Configuration {
     @NotNull
     private DataSourceFactory database = new DataSourceFactory();
 
+    @Valid
+    @NotNull
+    private LinksConfig links = new LinksConfig();
+
     @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return database;
@@ -20,6 +24,10 @@ public class PaymentsConfig extends Configuration {
     @JsonProperty("database")
     public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
         this.database = dataSourceFactory;
+    }
+
+    public LinksConfig getLinks() {
+        return links;
     }
     
 }

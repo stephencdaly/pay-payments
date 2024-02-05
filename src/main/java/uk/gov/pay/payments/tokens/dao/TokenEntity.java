@@ -1,15 +1,25 @@
-package uk.gov.pay.payments.payments.dao;
+package uk.gov.pay.payments.tokens.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import uk.gov.pay.payments.payments.dao.PaymentEntity;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
+import java.util.UUID;
+
+@NamedQuery(
+        name = TokenEntity.GET_BY_TOKEN,
+        query = "select t from TokenEntity t where token = :token"
+)
 
 @Entity
 @SequenceGenerator(name = "tokens_id_seq", sequenceName = "tokens_id_seq", allocationSize = 1)
 @Table(name = "tokens")
 public class TokenEntity {
+    public static final String GET_BY_TOKEN = "Token.get_by_secure_redirect_token";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tokens_id_seq")
     @JsonIgnore
@@ -27,6 +37,15 @@ public class TokenEntity {
 
     @Column(name = "used")
     private boolean used;
+    
+    public static TokenEntity generateNewTokenFor(PaymentEntity payment) {
+        TokenEntity tokenEntity = new TokenEntity();
+        tokenEntity.setPaymentEntity(payment);
+        tokenEntity.setCreatedDate(payment.getCreatedDate());
+        tokenEntity.setToken(UUID.randomUUID().toString());
+        tokenEntity.setUsed(false);
+        return tokenEntity;
+    }
 
     public String getToken() {
         return token;
@@ -40,8 +59,8 @@ public class TokenEntity {
         return createdDate;
     }
 
-    public void setCreatedDate(OffsetDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = OffsetDateTime.ofInstant(createdDate, ZoneOffset.UTC);
     }
 
     public PaymentEntity getPaymentEntity() {

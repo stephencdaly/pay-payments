@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.pay.payments.healthcheck.HealthCheckResource;
 import uk.gov.pay.payments.healthcheck.Ping;
 import uk.gov.pay.payments.payments.dao.PaymentEntity;
+import uk.gov.pay.payments.tokens.dao.TokenEntity;
 import uk.gov.service.payments.commons.utils.healthchecks.DatabaseHealthCheck;
 import uk.gov.service.payments.commons.utils.metrics.DatabaseMetricsService;
 import uk.gov.service.payments.logging.GovUkPayDropwizardRequestJsonLogLayoutFactory;
@@ -39,7 +40,8 @@ public class PaymentsApp extends Application<PaymentsConfig> {
     private static final int METRICS_COLLECTION_PERIOD_SECONDS = 30;
 
     private final HibernateBundle<PaymentsConfig> hibernate = new HibernateBundle<>(
-            PaymentEntity.class
+            PaymentEntity.class,
+            TokenEntity.class
     ) {
         @Override
         public DataSourceFactory getDataSourceFactory(PaymentsConfig configuration) {
@@ -49,7 +51,7 @@ public class PaymentsApp extends Application<PaymentsConfig> {
     
     @Override
     public void run(PaymentsConfig configuration, Environment environment) {
-        final Injector injector = Guice.createInjector(new PayemntsModule(configuration, environment, hibernate));
+        final Injector injector = Guice.createInjector(new PaymentsModule(configuration, environment, hibernate));
 
         environment.servlets().addFilter("LoggingFilter", new LoggingFilter())
                 .addMappingForUrlPatterns(of(REQUEST), true, "/v1/*");

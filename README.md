@@ -10,7 +10,7 @@ This microservice is required if we build open banking payments with a payment m
 
 ## How to run
 
-Check out [pay-infra branch](https://github.com/alphagov/pay-infra/tree/new-payment-microservice-prototype)
+Check out the [pay-infra branch](https://github.com/alphagov/pay-infra/tree/new-payment-microservice-prototype) that has configuration for running the new app as part of the local Docker compose cluster.
 
 ```sh
 pay local up --cluser card --local payments

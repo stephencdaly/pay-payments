@@ -400,7 +400,7 @@
                 <version>${swagger-version}</version>
                 <configuration>
                     <outputPath>openapi</outputPath>
-                    <outputFileName>webhooks_spec</outputFileName>
+                    <outputFileName>payments_spec</outputFileName>
                     <outputFormat>YAML</outputFormat>
                     <configurationFilePath>${basedir}/src/main/resources/openapi-config.yaml</configurationFilePath>
                 </configuration>

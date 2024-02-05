@@ -2,6 +2,12 @@
 
 Prototype microservice for storing information about created payments while they are in-flight.
 
+## API Specification
+
+The [API Specification](openapi/payments_spec.yaml) provides more detail on the paths and operations including examples.
+
+[View the API specification for payments in Swagger Editor](https://editor.swagger.io/?url=https://raw.githubusercontent.com/stephencdaly/pay-payments/main/openapi/payments_spec.yaml).
+
 ## Licence
 
 [MIT License](LICENSE)

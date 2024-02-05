@@ -1,11 +1,13 @@
 resourceClasses:
-  - uk.gov.pay.webhooks.healthcheck.HealthCheckResource
+  - uk.gov.pay.payments.payments.resource.PaymentResource
+  - uk.gov.pay.payments.tokens.resource.TokenResource
+  - uk.gov.pay.payments.healthcheck.HealthCheckResource
 readAllResources: true
 sortOutput: true
 prettyPrint: true
 
 openAPI:
   info:
-    description: 'Payments API'
-    title: 'Payments API'
+    description: 'Webhooks API'
+    title: 'Webhooks API'
     version: 'v1.0.0'

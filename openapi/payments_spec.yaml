@@ -1,0 +1,193 @@
+openapi: 3.0.1
+info:
+  description: Webhooks API
+  title: Webhooks API
+  version: v1.0.0
+paths:
+  /healthcheck:
+    get:
+      operationId: healthCheck
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+                example:
+                  database:
+                    healthy: true
+                    message: Healthy
+                  ping:
+                    healthy: true
+                    message: Healthy
+                  hibernate:
+                    healthy: true
+                    message: Healthy
+                  deadlocks:
+                    healthy: true
+                    message: Healthy
+                  sqsQueue:
+                    healthy: true
+                    message: Healthy
+          description: OK
+        "503":
+          description: Service unavailable. If any healthchecks fail
+      summary: "Healthcheck endpoint for payments. Check database, deadlocks, hibernate\
+        \ and ping"
+      tags:
+      - Other
+  /v1/account/{accountId}/payment/{paymentExternalId}:
+    get:
+      operationId: getPayment
+      parameters:
+      - in: path
+        name: accountId
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: path
+        name: paymentExternalId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+          description: OK
+        "404":
+          description: Not found
+      summary: Get payment by external ID and gateway account ID
+      tags:
+      - Payments
+  /v1/payment:
+    post:
+      operationId: createPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+          description: OK
+        "400":
+          description: Invalid payload
+        "422":
+          description: Missing required parameters
+      summary: Create new payment
+      tags:
+      - Payments
+  /v1/token/{token}:
+    get:
+      operationId: getToken
+      parameters:
+      - in: path
+        name: token
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+          description: default response
+      tags:
+      - Tokens
+  /v1/token/{token}/used:
+    post:
+      operationId: markTokenUsed
+      parameters:
+      - in: path
+        name: token
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      tags:
+      - Tokens
+components:
+  schemas:
+    CreatePaymentRequest:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        delayed_capture:
+          type: boolean
+        description:
+          type: string
+        gateway_account_id:
+          type: integer
+          format: int64
+        reference:
+          type: string
+        return_url:
+          type: string
+      required:
+      - description
+      - reference
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        method:
+          type: string
+    PaymentLinks:
+      type: object
+      description: links for payment
+      properties:
+        next_url:
+          $ref: '#/components/schemas/Link'
+    PaymentResponse:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        created_date:
+          type: string
+          format: date-time
+        delayed_capture:
+          type: boolean
+        description:
+          type: string
+        external_id:
+          type: string
+        gateway_account_id:
+          type: integer
+          format: int64
+        links:
+          $ref: '#/components/schemas/PaymentLinks'
+        reference:
+          type: string
+        return_url:
+          type: string
+      required:
+      - amount
+      - description
+      - gateway_account_id
+      - reference
+    TokenResponse:
+      type: object
+      properties:
+        payment:
+          $ref: '#/components/schemas/PaymentResponse'
+        used:
+          type: boolean

@@ -2,6 +2,14 @@
 
 Prototype microservice for storing information about created payments while they are in-flight.
 
+## How to run
+
+Check out [pay-infra branch](https://github.com/alphagov/pay-infra/tree/new-payment-microservice-prototype)
+
+```sh
+pay local up --cluser card --local payments
+```
+
 ## API Specification
 
 The [API Specification](openapi/payments_spec.yaml) provides more detail on the paths and operations including examples.

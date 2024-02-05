@@ -13,8 +13,8 @@ CREATE table payments (
     return_url TEXT,
     delayed_capture BOOLEAN NOT NULL,
     moto BOOLEAN NOT NULL
-)
+);
 
-CREATE INDEX payments_external_id_idx ON payments(external_id)
+CREATE INDEX payments_external_id_idx ON payments(external_id);
 
 --rollback DROP table payments

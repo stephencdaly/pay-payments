@@ -63,4 +63,4 @@ database:
   minIdleTime: 1 minute
 
 links:
-  frontendUrl: ${FRONTEND_URL}
+  frontendUrl: ${FRONTEND_URL:-http://frontend/}

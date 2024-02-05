@@ -1,5 +1,6 @@
 package uk.gov.pay.payments.payments.resource;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import uk.gov.pay.payments.app.LinksConfig;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.time.Instant;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record PaymentResponse (
         @JsonProperty("external_id") String externalId,
         @JsonProperty("gateway_account_id") @NotEmpty long gatewayAccountId,
@@ -24,7 +26,7 @@ public record PaymentResponse (
         @JsonProperty("links") PaymentLinks links
 ) {
     
-    public static PaymentResponse from(PaymentEntity payment, TokenEntity token, LinksConfig linksConfig) {
+    public static PaymentResponse withNextUrl(PaymentEntity payment, TokenEntity token, LinksConfig linksConfig) {
         var links = new PaymentLinks(
                 new Link(nextUrl(token.getToken(), linksConfig).toString(), "GET")
         );
@@ -38,6 +40,20 @@ public record PaymentResponse (
                 payment.isDelayedCapture(), 
                 payment.getCreatedDate(),
                 links
+        );
+    }
+
+    public static PaymentResponse withoutNextUrl(PaymentEntity payment) {
+        return new PaymentResponse(
+                payment.getExternalId(),
+                payment.getGatewayAccountId(),
+                payment.getAmount(),
+                payment.getReference(),
+                payment.getDescription(),
+                payment.getReturnUrl(),
+                payment.isDelayedCapture(),
+                payment.getCreatedDate(),
+                null
         );
     }
 

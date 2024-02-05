@@ -18,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import uk.gov.pay.payments.healthcheck.HealthCheckResource;
 import uk.gov.pay.payments.healthcheck.Ping;
 import uk.gov.pay.payments.payments.dao.PaymentEntity;
+import uk.gov.pay.payments.payments.resource.PaymentResource;
 import uk.gov.pay.payments.tokens.dao.TokenEntity;
+import uk.gov.pay.payments.tokens.resource.TokenResource;
 import uk.gov.service.payments.commons.utils.healthchecks.DatabaseHealthCheck;
 import uk.gov.service.payments.commons.utils.metrics.DatabaseMetricsService;
 import uk.gov.service.payments.logging.GovUkPayDropwizardRequestJsonLogLayoutFactory;
@@ -59,6 +61,8 @@ public class PaymentsApp extends Application<PaymentsConfig> {
         environment.healthChecks().register("ping", new Ping());
         environment.healthChecks().register("database", new DatabaseHealthCheck(configuration.getDataSourceFactory()));
         environment.jersey().register(injector.getInstance(HealthCheckResource.class));
+        environment.jersey().register(injector.getInstance(PaymentResource.class));
+        environment.jersey().register(injector.getInstance(TokenResource.class));
 
         initialiseMetrics(configuration, environment);
     }

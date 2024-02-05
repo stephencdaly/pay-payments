@@ -1,6 +1,7 @@
 package uk.gov.pay.payments.payments;
 
 import uk.gov.pay.payments.app.LinksConfig;
+import uk.gov.pay.payments.app.PaymentsConfig;
 import uk.gov.pay.payments.payments.dao.PaymentDao;
 import uk.gov.pay.payments.payments.dao.PaymentEntity;
 import uk.gov.pay.payments.payments.resource.CreatePaymentRequest;
@@ -10,6 +11,7 @@ import uk.gov.pay.payments.tokens.dao.TokenEntity;
 import uk.gov.pay.payments.util.IdGenerator;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
 import java.time.InstantSource;
 
 public class PaymentService {
@@ -24,13 +26,13 @@ public class PaymentService {
                           TokenDao tokenDao,
                           InstantSource instantSource,
                           IdGenerator idGenerator,
-                          LinksConfig linksConfig
+                          PaymentsConfig config
     ) {
         this.paymentDao = paymentDao;
         this.tokenDao = tokenDao;
         this.instantSource = instantSource;
         this.idGenerator = idGenerator;
-        this.linksConfig = linksConfig;
+        this.linksConfig = config.getLinks();
     }
     
     public PaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
@@ -38,6 +40,13 @@ public class PaymentService {
         paymentDao.create(paymentEntity);
         var tokenEntity = TokenEntity.generateNewTokenFor(paymentEntity);
         tokenDao.create(tokenEntity);
-        return PaymentResponse.from(paymentEntity, tokenEntity, linksConfig);
+        return PaymentResponse.withNextUrl(paymentEntity, tokenEntity, linksConfig);
+    }
+    
+    public PaymentResponse getPaymentByExternalIdAndGatewayAccountId(String paymentExternalId, long gatewayAccountId) {
+        var paymentEntity = paymentDao.findByExternalIdAndGatewayAccountId(paymentExternalId, gatewayAccountId)
+                .orElseThrow(() -> new WebApplicationException("Could not find payment", 404));
+        
+        return PaymentResponse.withoutNextUrl(paymentEntity);
     }
 }

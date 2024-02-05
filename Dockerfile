@@ -1,4 +1,11 @@
-FROM eclipse-temurin:17-jre-alpine@sha256:642f8b0eee66d8d2fbe07028dd511a2e531a85bd190986a3fad571032371e026
+FROM maven:3.9.5-eclipse-temurin-17-alpine@sha256:5f0dc07092c3806ff7cf7c3f21b0e93d30befc5d56adf03758d301c05d63efb8 AS builder
+
+WORKDIR /home/build
+COPY . .
+
+RUN ["mvn", "clean", "--no-transfer-progress", "package", "-DskipTests"]
+
+FROM eclipse-temurin:17-jre-alpine@sha256:d6d64277f4b88a821e604896f356ebdf1bda846f68d6d8d9c96919384e47d498 AS final
 
 RUN ["apk", "--no-cache", "upgrade"]
 
@@ -9,9 +16,8 @@ ENV LANG C.UTF-8
 
 RUN echo networkaddress.cache.ttl=$DNS_TTL >> "$JAVA_HOME/conf/security/java.security"
 
-# Add RDS CA certificates to the default truststore
-RUN wget -qO - https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem       | keytool -importcert -noprompt -cacerts -storepass changeit -alias rds-ca-2019-root \
- && wget -qO - https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem | keytool -importcert -noprompt -cacerts -storepass changeit -alias rds-combined-ca-bundle
+COPY ./import_aws_rds_cert_bundles.sh /
+RUN /import_aws_rds_cert_bundles.sh && rm /import_aws_rds_cert_bundles.sh
 
 RUN ["apk", "add", "--no-cache", "bash", "tini"]
 
@@ -23,9 +29,9 @@ EXPOSE 8081
 
 WORKDIR /app
 
-COPY docker-startup.sh /app/docker-startup.sh
-COPY target/*.yaml /app/
-COPY target/pay-*-allinone.jar /app/
+COPY --from=builder /home/build/docker-startup.sh .
+COPY --from=builder /home/build/target/*.yaml .
+COPY --from=builder /home/build/target/pay-*-allinone.jar .
 
 ENTRYPOINT ["tini", "-e", "143", "--"]
 

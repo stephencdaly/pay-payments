@@ -18,7 +18,7 @@ public class PaymentDao extends AbstractDAO<PaymentEntity> {
         return payment;
     }
     
-    public Optional<PaymentEntity> findByExternalIdAndGatewayAccountId(String paymentExternalId, String gatewayAccountId) {
+    public Optional<PaymentEntity> findByExternalIdAndGatewayAccountId(String paymentExternalId, long gatewayAccountId) {
         return namedTypedQuery(PaymentEntity.GET_BY_EXTERNAL_ID_AND_GATEWAY_ACCOUNT_ID)
                 .setParameter("externalId", paymentExternalId)
                 .setParameter("gatewayAccountId", gatewayAccountId)

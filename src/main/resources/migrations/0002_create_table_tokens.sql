@@ -8,8 +8,8 @@ CREATE table tokens (
     payment_id BIGINT NOT NULL,
     secure_redirect_token VARCHAR(255) NOT NULL,
     used BOOLEAN NOT NULL
-)
+);
 
-CREATE INDEX tokens_secure_redirect_token_idx ON tokens(secure_redirect_token)
+CREATE INDEX tokens_secure_redirect_token_idx ON tokens(secure_redirect_token);
 
 --rollback DROP table tokens

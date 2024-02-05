@@ -7,14 +7,11 @@ import uk.gov.pay.payments.payments.PaymentService;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-@Path("/v1/payment")
+@Path("/v1")
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 @Tag(name = "Payments")
@@ -29,7 +26,16 @@ public class PaymentResource {
     
     @UnitOfWork
     @POST
+    @Path("/payment")
     public PaymentResponse createPayment(@NotNull @Valid CreatePaymentRequest request) {
         return paymentService.createPayment(request);
+    }
+    
+    @UnitOfWork
+    @GET
+    @Path("/account/{accountId}/payment/{paymentExternalId}")
+    public PaymentResponse getPayment(@PathParam("accountId") long accountId,
+                                      @PathParam("paymentExternalId") String paymentExternalId) {
+        return paymentService.getPaymentByExternalIdAndGatewayAccountId(paymentExternalId, accountId);
     }
 }

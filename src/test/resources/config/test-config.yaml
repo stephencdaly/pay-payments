@@ -35,4 +35,4 @@ database:
   minIdleTime: 1 minute
 
 links:
-  frontendUrl: http://CardFrontend/
+  frontendUrl: http://frontend/

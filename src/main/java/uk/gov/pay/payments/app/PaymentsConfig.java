@@ -26,6 +26,7 @@ public class PaymentsConfig extends Configuration {
         this.database = dataSourceFactory;
     }
 
+    @JsonProperty("links")
     public LinksConfig getLinks() {
         return links;
     }

@@ -1,0 +1,11 @@
+resourceClasses:
+  - uk.gov.pay.webhooks.healthcheck.HealthCheckResource
+readAllResources: true
+sortOutput: true
+prettyPrint: true
+
+openAPI:
+  info:
+    description: 'Payments API'
+    title: 'Payments API'
+    version: 'v1.0.0'

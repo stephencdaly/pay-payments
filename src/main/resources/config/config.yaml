@@ -1,0 +1,63 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: ${PORT:-8080}
+  adminConnectors:
+    - type: http
+      port: ${ADMIN_PORT:-0}
+  requestLog:
+    appenders:
+      - type: console
+        layout:
+          type: govuk-pay-access-json
+          additionalFields:
+            container: "payments"
+            environment: ${ENVIRONMENT}
+logging:
+  level: INFO
+  appenders:
+    - type: logstash-console
+      threshold: ALL
+      target: stdout
+      customFields:
+        container: "payments"
+        environment: ${ENVIRONMENT}
+    - type: sentry
+      threshold: ERROR
+      dsn: ${SENTRY_DSN:-https://example.com@dummy/1}
+      environment: ${ENVIRONMENT}
+
+database:
+  driverClass: org.postgresql.Driver
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+  url: jdbc:postgresql://${DB_HOST}:5432/payments?sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&${DB_SSL_OPTION}
+
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate.generate_statistics: false
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "SELECT '1'"
+
+  # the timeout before a connection validation queries fail
+  validationQueryTimeout: 3s
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: true
+
+  # the amount of time to sleep between runs of the idle connection validation, abandoned cleaner and idle pool resizing
+  evictionInterval: 10s
+
+  # the minimum amount of time an connection must sit idle in the pool before it is eligible for eviction
+  minIdleTime: 1 minute

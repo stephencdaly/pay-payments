@@ -20,15 +20,6 @@ paths:
                   ping:
                     healthy: true
                     message: Healthy
-                  hibernate:
-                    healthy: true
-                    message: Healthy
-                  deadlocks:
-                    healthy: true
-                    message: Healthy
-                  sqsQueue:
-                    healthy: true
-                    message: Healthy
           description: OK
         "503":
           description: Service unavailable. If any healthchecks fail

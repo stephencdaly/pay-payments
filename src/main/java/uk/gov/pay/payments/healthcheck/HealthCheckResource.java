@@ -48,18 +48,6 @@ public class HealthCheckResource {
                             "    \"ping\": {" +
                             "        \"healthy\": true," +
                             "        \"message\": \"Healthy\"" +
-                            "    }," +
-                            "    \"hibernate\": {" +
-                            "        \"healthy\": true," +
-                            "        \"message\": \"Healthy\"" +
-                            "    }," +
-                            "    \"deadlocks\": {" +
-                            "        \"healthy\": true," +
-                            "        \"message\": \"Healthy\"" +
-                            "    }," +
-                            "    \"sqsQueue\": {" +
-                            "        \"healthy\": true," +
-                            "        \"message\": \"Healthy\"" +
                             "    }" +
                             "}")), description = "OK"),
                     @ApiResponse(responseCode = "503", description = "Service unavailable. If any healthchecks fail")

@@ -8,6 +8,6 @@ prettyPrint: true
 
 openAPI:
   info:
-    description: 'Webhooks API'
-    title: 'Webhooks API'
+    description: 'Payments API'
+    title: 'Payments API'
     version: 'v1.0.0'

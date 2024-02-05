@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-  description: Webhooks API
-  title: Webhooks API
+  description: Payments API
+  title: Payments API
   version: v1.0.0
 paths:
   /healthcheck:

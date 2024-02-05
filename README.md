@@ -2,6 +2,12 @@
 
 Prototype microservice for storing information about created payments while they are in-flight.
 
+This microservice is required if we build open banking payments with a payment method selection page as part of the paying user journey. 
+
+[pay-publicapi](https://github.com/alphagov/pay-publicapi) creates payments in this microservice,
+
+[pay-publicapi](https://github.com/alphagov/pay-publicapi) and [pay-frontend](https://github.com/alphagov/pay-frontend) get non-payment method specific information about a payment.
+
 ## How to run
 
 Check out [pay-infra branch](https://github.com/alphagov/pay-infra/tree/new-payment-microservice-prototype)

@@ -12,6 +12,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record PaymentResponse (
@@ -23,12 +25,12 @@ public record PaymentResponse (
         @JsonProperty("return_url") String returnUrl,
         @JsonProperty("delayed_capture") boolean delayedCapture,
         @JsonProperty("created_date") @JsonSerialize(using = ApiResponseInstantSerializer.class) Instant createdDate,
-        @JsonProperty("links") PaymentLinks links
+        @JsonProperty("links") List<Link> links
 ) {
     
     public static PaymentResponse withNextUrl(PaymentEntity payment, TokenEntity token, LinksConfig linksConfig) {
-        var links = new PaymentLinks(
-                new Link(nextUrl(token.getToken(), linksConfig).toString(), "GET")
+        var links = List.of(
+                new Link("next_url", nextUrl(token.getToken(), linksConfig).toString(), "GET")
         );
         return new PaymentResponse(
                 payment.getExternalId(),

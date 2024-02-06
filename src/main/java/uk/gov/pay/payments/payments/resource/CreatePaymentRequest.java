@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 
 public record CreatePaymentRequest (
-    @JsonProperty("gateway_account_id") long gatewayAccountId,
     @JsonProperty("amount") long amount,
     @JsonProperty("reference") @NotEmpty String reference,
     @JsonProperty("description") @NotEmpty String description,

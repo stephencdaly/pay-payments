@@ -30,7 +30,7 @@ public class PaymentResource {
     
     @UnitOfWork
     @POST
-    @Path("/payment")
+    @Path("/account/{accountId}/payment")
     @Operation(
             summary = "Create new payment",
             responses = {
@@ -40,8 +40,10 @@ public class PaymentResource {
                     @ApiResponse(responseCode = "400", description = "Invalid payload")
             }
     )
-    public PaymentResponse createPayment(@NotNull @Valid CreatePaymentRequest request) {
-        return paymentService.createPayment(request);
+    public PaymentResponse createPayment(
+            @PathParam("accountId") long accountId,
+            @NotNull @Valid CreatePaymentRequest request) {
+        return paymentService.createPayment(accountId, request);
     }
     
     @UnitOfWork

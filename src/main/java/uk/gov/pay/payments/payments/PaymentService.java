@@ -35,8 +35,8 @@ public class PaymentService {
         this.linksConfig = config.getLinks();
     }
     
-    public PaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
-        var paymentEntity = PaymentEntity.from(createPaymentRequest, idGenerator.newExternalId(), instantSource.instant());
+    public PaymentResponse createPayment( long gatewayAccountId, CreatePaymentRequest createPaymentRequest) {
+        var paymentEntity = PaymentEntity.from(gatewayAccountId, createPaymentRequest, idGenerator.newExternalId(), instantSource.instant());
         paymentDao.create(paymentEntity);
         var tokenEntity = TokenEntity.generateNewTokenFor(paymentEntity);
         tokenDao.create(tokenEntity);

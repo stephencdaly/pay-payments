@@ -53,14 +53,14 @@ public class PaymentEntity {
     private boolean moto;
     
 
-    public static PaymentEntity from(CreatePaymentRequest createPaymentRequest, String externalId, Instant createdDate) {
+    public static PaymentEntity from(long gatewayAccountId, CreatePaymentRequest createPaymentRequest, String externalId, Instant createdDate) {
         var entity = new PaymentEntity();
+        entity.setGatewayAccountId(gatewayAccountId);
         entity.setExternalId(externalId);
         entity.setCreatedDate(createdDate);
         entity.setAmount(createPaymentRequest.amount());
         entity.setReference(createPaymentRequest.reference());
         entity.setDescription(createPaymentRequest.description());
-        entity.setGatewayAccountId(createPaymentRequest.gatewayAccountId());
         entity.setReturnUrl(createPaymentRequest.returnUrl());
         entity.setDelayedCapture(createPaymentRequest.delayedCapture());
         return entity;

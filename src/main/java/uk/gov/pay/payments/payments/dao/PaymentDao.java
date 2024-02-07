@@ -26,4 +26,12 @@ public class PaymentDao extends AbstractDAO<PaymentEntity> {
                 .stream()
                 .findFirst();
     }
+
+    public Optional<PaymentEntity> findByExternalId(String paymentExternalId) {
+        return namedTypedQuery(PaymentEntity.GET_BY_EXTERNAL_ID)
+                .setParameter("externalId", paymentExternalId)
+                .getResultList()
+                .stream()
+                .findFirst();
+    }
 }

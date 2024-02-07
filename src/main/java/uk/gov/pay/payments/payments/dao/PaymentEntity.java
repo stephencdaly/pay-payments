@@ -13,11 +13,17 @@ import java.time.ZoneOffset;
         query = "select p from PaymentEntity p where externalId = :externalId and gatewayAccountId = :gatewayAccountId"
 )
 
+@NamedQuery(
+        name = PaymentEntity.GET_BY_EXTERNAL_ID,
+        query = "select p from PaymentEntity  p where externalId = :externalId"
+)
+
 @Entity
 @SequenceGenerator(name="payments_id_seq", sequenceName = "payments_id_seq", allocationSize = 1)
 @Table(name = "payments")
 public class PaymentEntity {
-    public static final String GET_BY_EXTERNAL_ID_AND_GATEWAY_ACCOUNT_ID = "Payment.get_by_external_id_and_gateway_account_id"; 
+    public static final String GET_BY_EXTERNAL_ID_AND_GATEWAY_ACCOUNT_ID = "Payment.get_by_external_id_and_gateway_account_id";
+    public static final String GET_BY_EXTERNAL_ID = "Payment.get_by_external_id";
     
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payments_id_seq")

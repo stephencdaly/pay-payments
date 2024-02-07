@@ -60,4 +60,18 @@ public class PaymentResource {
                                       @PathParam("paymentExternalId") String paymentExternalId) {
         return paymentService.getPaymentByExternalIdAndGatewayAccountId(paymentExternalId, accountId);
     }
+
+    @UnitOfWork
+    @GET
+    @Path("/frontend/payment/{paymentExternalId}")
+    @Operation(
+            summary = "Get payment by external ID. Only for use by frontend app.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PaymentResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Not found")
+            }
+    )
+    public PaymentResponse getPaymentFrontend(@PathParam("paymentExternalId") String paymentExternalId) {
+        return paymentService.getPaymentByExternalId(paymentExternalId);
+    }
 }

@@ -49,4 +49,11 @@ public class PaymentService {
         
         return PaymentResponse.withoutNextUrl(paymentEntity);
     }
+    
+    public PaymentResponse getPaymentByExternalId(String paymentExternalId) {
+        var paymentEntity = paymentDao.findByExternalId(paymentExternalId)
+                .orElseThrow(() -> new WebApplicationException("Could not find payment", 404));
+        
+        return PaymentResponse.withoutNextUrl(paymentEntity);
+    }
 }
